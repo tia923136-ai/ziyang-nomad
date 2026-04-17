@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资阳游民 · 图片文案</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.nav-group-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-muted); padding: 10px 12px 4px;
+}
+.tool-notice {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.page-footer-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px; border-top: 1px solid var(--border-light);
+  background: var(--bg-card); margin-top: auto;
+}
+
+/* 操作栏 */
+.action-bar {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  padding: 12px 16px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.select-input {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 6px 10px; font-size: 13px; color: var(--text-primary);
+  background: var(--bg); font-family: var(--font); cursor: pointer;
+}
+
+/* 小红书卡片网格 */
+.xhs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.xhs-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.xhs-card:hover { box-shadow: var(--shadow); }
+
+.xhs-img-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr; gap: 2px;
+  height: 120px; background: var(--border);
+}
+.xhs-img-cell {
+  background: linear-gradient(135deg, #eef3ee, #d4e8c2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.xhs-img-cell:nth-child(2) { background: linear-gradient(135deg, #fdf4e7, #f5d5a0); }
+.xhs-img-cell:nth-child(3) { background: linear-gradient(135deg, #edf3f8, #b8d4e8); }
+.xhs-img-cell:nth-child(4) { background: linear-gradient(135deg, #f5f0ff, #d4b8f0); }
+
+.xhs-body { padding: 12px; }
+.xhs-title {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  line-height: 1.4; margin-bottom: 6px;
+}
+.xhs-content {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+  overflow: hidden; position: relative; margin-bottom: 8px;
+}
+.xhs-content::after {
+  content: ''; position: absolute; bottom: 0; right: 0;
+  width: 60px; height: 20px;
+  background: linear-gradient(to right, transparent, white);
+}
+.xhs-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.xhs-tag {
+  font-size: 11px; color: var(--accent-blue); cursor: pointer;
+}
+.xhs-actions {
+  display: flex; flex-direction: column;
+  gap: 6px; padding-top: 8px;
+  border-top: 1px solid var(--border-light);
+}
+.xhs-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.xhs-push-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+.btn-push {
+  font-size: 10px; padding: 5px 4px; font-weight: 500;
+  border-radius: var(--radius); cursor: pointer; font-family: var(--font);
+  transition: all 0.15s; border: 1px solid;
+  text-align: center; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 飞书素材库（绿色系） */
+.btn-push-feishu {
+  background: #e6f9f5; color: #00a68a; border-color: #b8e6dd;
+}
+.btn-push-feishu:hover { background: #d0f0e8; }
+.btn-push-feishu.pushed { background: #d0f0e8; color: #00a68a; border-color: #8fd4c2; }
+/* 分发中心（浅绿系） */
+.btn-push-pub {
+  background: var(--accent-green-light); color: var(--accent-green); border-color: #c8dfc8;
+}
+.btn-push-pub:hover { background: #dfe9df; }
+.btn-push-pub.pushed { background: #d4e6d4; border-color: #a8c5a0; }
+/* 公众号封面（浅蓝系） */
+.btn-push-gzh {
+  background: var(--accent-blue-light); color: var(--accent-blue); border-color: #b8d4e8;
+}
+.btn-push-gzh:hover { background: #dde8f3; }
+.btn-push-gzh.pushed { background: #c8dbe8; border-color: #8cb0cc; }
+.btn-feishu {
+  background: #e6f9f5; color: #00a68a; border: 1px solid #b8e6dd;
+  font-size: 11px; padding: 5px; font-weight: 500;
+  border-radius: var(--radius); cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-feishu:hover { background: #d0f0e8; }
+.btn-feishu.pushed { background: #d0f0e8; color: #00a68a; }
+
+/* Canva 诚实提示 */
+.canva-notice {
+  background: #fffaeb; border: 1px solid #f0d5a0;
+  border-radius: var(--radius); padding: 10px 14px;
+  font-size: 12px; color: #8b5a1a; line-height: 1.6;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+}
+.canva-notice strong { font-weight: 700; }
+.canva-notice code {
+  background: rgba(139,90,26,0.1); padding: 1px 5px;
+  border-radius: 3px; font-size: 11px; font-family: monospace;
+}
+.img-count-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.5); color: white;
+  border-radius: 10px; padding: 2px 7px; font-size: 11px;
+}
+
+/* 右侧图片池 */
+.photo-pool {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+.pool-header {
+  padding: 14px 16px; border-bottom: 1px solid var(--border-light);
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  position: sticky; top: 0; background: var(--bg-card);
+}
+.pool-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 3px; padding: 10px;
+}
+.pool-img {
+  aspect-ratio: 1; border-radius: 4px;
+  background: linear-gradient(135deg, #eef3ee, #d4e8c2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: grab; border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+.pool-img:hover { border-color: var(--accent-green); }
+.pool-img:nth-child(3n+1) { background: linear-gradient(135deg,#fdf4e7,#f5d5a0); }
+.pool-img:nth-child(3n+2) { background: linear-gradient(135deg,#edf3f8,#b8d4e8); }
+</style>
+</head>
+<body>
+
+<!-- 侧边导航 -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">资阳游民</div>
+    <div class="logo-sub">数字游民社区 · AI 工具箱</div>
+  </div>
+  <div class="sidebar-nav">
+    <!-- 分组：工具箱 -->
+    <div class="nav-group-label">🛠 工具箱</div>
+    <a href="tool-video.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg>
+      <span class="nav-label">视频快剪</span>
+    </a>
+    <a href="tool-image.html" class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+      <span class="nav-label">图片文案</span>
+    </a>
+    <a href="tool-gzh.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="nav-label">公众号发布</span>
+    </a>
+    <a href="tool-publish.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      <span class="nav-label">多平台分发</span>
+    </a>
+    <a href="tool-chat.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="nav-label">聊天分析</span>
+    </a>
+    <a href="tool-matrix.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="nav-label">矩阵数据</span>
+    </a>
+    <!-- 分组：进阶模块 -->
+    <div class="nav-group-label" style="margin-top:6px;">📊 进阶模块</div>
+    <a href="dashboard.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span class="nav-label">老板驾驶舱</span>
+    </a>
+    <a href="crm.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-label">客户旅程</span>
+    </a>
+    <a href="content.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <span class="nav-label">内容 ROI</span>
+    </a>
+    <a href="cunbao.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="nav-label">村宝副驾</span>
+    </a>
+    <a href="activity.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="nav-label">活动工厂</span>
+    </a>
+    <!-- 分组：商务方案 -->
+    <div class="nav-group-label" style="margin-top:6px;">💼 商务方案</div>
+    <a href="plan.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      <span class="nav-label">产品方案</span>
+    </a>
+    <a href="pricing.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="nav-label">报价单</span>
+    </a>
+    <a href="team.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11h-6M20 8v6"/></svg>
+      <span class="nav-label">账号权限</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">舒</div>
+      <div class="user-info">
+        <div class="user-name">抒云</div>
+        <div class="user-role">合作方 · 只读</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="main" style="display:flex;flex-direction:column;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">图片文案</div>
+      <div class="page-subtitle">批量图片分组 · 自动生成小红书文案</div>
+    </div>
+    <div class="tool-notice">💡 我是独立工具，可单独购买 ¥9,800</div>
+  </div>
+
+  <div class="page-content fade-in" style="flex:1;">
+
+    <!-- 操作栏 -->
+    <div class="action-bar">
+      <button class="btn btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        上传图片
+      </button>
+      <select class="select-input">
+        <option>调性：治愈系自然风</option>
+        <option>调性：大厂逃离</option>
+        <option>调性：亲子家庭</option>
+        <option>调性：驻地生活</option>
+      </select>
+      <select class="select-input">
+        <option>目标平台：小红书</option>
+        <option>目标平台：抖音</option>
+        <option>目标平台：公众号</option>
+      </select>
+      <button class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        开始生成
+      </button>
+      <span style="margin-left:auto;font-size:12px;color:var(--text-muted);">已上传 38 张 · 已分为 5 组</span>
+    </div>
+
+    <!-- Canva 诚实提示 -->
+    <div class="canva-notice">
+      <span style="font-size:16px;">💡</span>
+      <div>
+        <strong>需要专门宣传海报？</strong>建议用 Canva + 我们提供的品牌色（<code>#5a7a5a</code> / <code>#c47c2e</code>）。AI 不做真正的海报设计，这里只生成小红书图文卡片。
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 200px;gap:16px;">
+
+      <!-- 卡片网格 -->
+      <div class="xhs-grid">
+
+        <!-- 卡片1 -->
+        <div class="xhs-card">
+          <div style="position:relative;">
+            <div class="xhs-img-grid">
+              <div class="xhs-img-cell">🌿</div>
+              <div class="xhs-img-cell">🎵</div>
+              <div class="xhs-img-cell">🌙</div>
+              <div class="xhs-img-cell">🪨</div>
+            </div>
+            <span class="img-count-badge">9张</span>
+          </div>
+          <div class="xhs-body">
+            <div class="xhs-title">🌿 周末下午，我在资阳的竹林里听到了一场民谣</div>
+            <div class="xhs-content">
+              那天下午三点，阳光从竹叶缝隙漏进来，刚好打在村宝搭的小舞台上。唱歌的是从成都来的背包客，吉他调子很旧很好听。我坐在竹椅上，喝了第三杯艾草茶，才发现自己已经忘记看手机三个小时了。
+            </div>
+            <div class="xhs-tags">
+              <span class="xhs-tag">#民宿</span>
+              <span class="xhs-tag">#逃离大厂</span>
+              <span class="xhs-tag">#竹林</span>
+              <span class="xhs-tag">#慢生活</span>
+            </div>
+            <div class="xhs-actions">
+              <div class="xhs-actions-row">
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">复制文案</button>
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">下载图包</button>
+              </div>
+              <div class="xhs-push-row">
+                <button class="btn-push btn-push-feishu pushed">✓ 已推送 · 14:32</button>
+                <button class="btn-push btn-push-pub pushed">✓ 分发中心 · 14:35</button>
+                <button class="btn-push btn-push-gzh">📖 作为公众号封面</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片2 -->
+        <div class="xhs-card">
+          <div style="position:relative;">
+            <div class="xhs-img-grid">
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf4e7,#f5d5a0);">🍳</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf0ef,#f0b8b4);">🥢</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#eef3ee,#a8d18e);">🌾</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#f5f2ed,#e8e2d9);">🫖</div>
+            </div>
+            <span class="img-count-badge">12张</span>
+          </div>
+          <div class="xhs-body">
+            <div class="xhs-title">🌾 在地早餐：竹溪谷的一顿饭要花掉一个上午</div>
+            <div class="xhs-content">
+              村宝早上五点半就起来熬粥，用的是本地的糯米，配自家腌的竹笋。这里没有早餐时间限制，你想几点吃就几点吃，慢慢的那种。我吃完已经九点了，但一点都不焦虑。
+            </div>
+            <div class="xhs-tags">
+              <span class="xhs-tag">#在地美食</span>
+              <span class="xhs-tag">#民宿早餐</span>
+              <span class="xhs-tag">#治愈系</span>
+            </div>
+            <div class="xhs-actions">
+              <div class="xhs-actions-row">
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">复制文案</button>
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">下载图包</button>
+              </div>
+              <div class="xhs-push-row">
+                <button class="btn-push btn-push-feishu">📋 推送飞书素材库</button>
+                <button class="btn-push btn-push-pub">📤 推送到分发中心</button>
+                <button class="btn-push btn-push-gzh">📖 作为公众号封面</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片3 -->
+        <div class="xhs-card">
+          <div style="position:relative;">
+            <div class="xhs-img-grid">
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#edf3f8,#b8d4e8);">🛖</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#eef3ee,#d4e8c2);">🌄</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#f5f0ff,#d4b8f0);">🌸</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf4e7,#f5d5a0);">🪑</div>
+            </div>
+            <span class="img-count-badge">6张</span>
+          </div>
+          <div class="xhs-body">
+            <div class="xhs-title">🛖 我住了三天的那个院子，离成都两小时但像另一个星球</div>
+            <div class="xhs-content">
+              房间没有电视，有落地窗正对竹林。晚上没有娱乐，但有星星。早上六点自然醒，不是因为闹钟，是被鸟叫叫醒的——而且你不会觉得烦。
+            </div>
+            <div class="xhs-tags">
+              <span class="xhs-tag">#民宿房间</span>
+              <span class="xhs-tag">#成都周边</span>
+              <span class="xhs-tag">#独处</span>
+              <span class="xhs-tag">#疗愈</span>
+            </div>
+            <div class="xhs-actions">
+              <div class="xhs-actions-row">
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">复制文案</button>
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">下载图包</button>
+              </div>
+              <div class="xhs-push-row">
+                <button class="btn-push btn-push-feishu pushed">✓ 已推送 · 13:15</button>
+                <button class="btn-push btn-push-pub">📤 推送到分发中心</button>
+                <button class="btn-push btn-push-gzh pushed">✓ 公众号 · 13:20</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片4 -->
+        <div class="xhs-card">
+          <div style="position:relative;">
+            <div class="xhs-img-grid">
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#eef3ee,#5a7a5a);"><span style="color:white;font-size:20px;">🏃</span></div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#eef3ee,#a8d18e);">🧘</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf4e7,#f5d5a0);">💧</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#edf3f8,#b8d4e8);">🌫</div>
+            </div>
+            <span class="img-count-badge">8张</span>
+          </div>
+          <div class="xhs-body">
+            <div class="xhs-title">🏃 6点30，竹溪谷的冥想晨跑：我的身体开始记住这件事</div>
+            <div class="xhs-content">
+              回到城市后我试着继续，但总差点什么。后来想明白了，那里的空气不一样，那里的安静不一样，还有，跑完能直接跳进旁边的冷水溪里——这个在北京没办法复刻。
+            </div>
+            <div class="xhs-tags">
+              <span class="xhs-tag">#晨跑</span>
+              <span class="xhs-tag">#冥想</span>
+              <span class="xhs-tag">#身体疗愈</span>
+              <span class="xhs-tag">#大厂人出逃</span>
+            </div>
+            <div class="xhs-actions">
+              <div class="xhs-actions-row">
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">复制文案</button>
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">下载图包</button>
+              </div>
+              <div class="xhs-push-row">
+                <button class="btn-push btn-push-feishu">📋 推送飞书素材库</button>
+                <button class="btn-push btn-push-pub">📤 推送到分发中心</button>
+                <button class="btn-push btn-push-gzh">📖 作为公众号封面</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片5 -->
+        <div class="xhs-card">
+          <div style="position:relative;">
+            <div class="xhs-img-grid">
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf0ef,#f0b8b4);">👧</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#eef3ee,#d4e8c2);">🐛</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#fdf4e7,#f5d5a0);">🖐</div>
+              <div class="xhs-img-cell" style="background:linear-gradient(135deg,#edf3f8,#b8d4e8);">🌱</div>
+            </div>
+            <span class="img-count-badge">4张</span>
+          </div>
+          <div class="xhs-body">
+            <div class="xhs-title">👧 带 5 岁的孩子来这里，她问我竹子是树还是草</div>
+            <div class="xhs-content">
+              我不知道怎么回答，就去问了村宝。村宝带她找到一棵刚冒出来的竹笋，让她摸了摸，说"等你下次来，它会长到这么高"——然后比了比自己的腰。
+            </div>
+            <div class="xhs-tags">
+              <span class="xhs-tag">#亲子</span>
+              <span class="xhs-tag">#自然教育</span>
+              <span class="xhs-tag">#成都亲子游</span>
+            </div>
+            <div class="xhs-actions">
+              <div class="xhs-actions-row">
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">复制文案</button>
+                <button class="btn btn-secondary" style="font-size:11px;padding:5px;">下载图包</button>
+              </div>
+              <div class="xhs-push-row">
+                <button class="btn-push btn-push-feishu pushed">✓ 已推送 · 11:48</button>
+                <button class="btn-push btn-push-pub">📤 推送到分发中心</button>
+                <button class="btn-push btn-push-gzh">📖 作为公众号封面</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 空卡片占位 -->
+        <div style="border:2px dashed var(--border);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;min-height:200px;cursor:pointer;transition:border-color 0.15s;" onmouseenter="this.style.borderColor='var(--accent-green)'" onmouseleave="this.style.borderColor='var(--border)'">
+          <div class="empty-state" style="padding:20px;">
+            <div style="font-size:24px;margin-bottom:8px;">＋</div>
+            <div style="font-size:12px;">从图片池拖入<br>创建新组</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右侧图片池 -->
+      <div class="photo-pool">
+        <div class="pool-header">
+          图片池（未分组）
+          <div style="font-size:11px;color:var(--text-muted);font-weight:400;margin-top:2px;">拖拽到卡片组内</div>
+        </div>
+        <div class="pool-grid">
+          <div class="pool-img">🌿</div>
+          <div class="pool-img">🦋</div>
+          <div class="pool-img">🌊</div>
+          <div class="pool-img">🍃</div>
+          <div class="pool-img">🌙</div>
+          <div class="pool-img">🔥</div>
+          <div class="pool-img">🌺</div>
+          <div class="pool-img">⛰</div>
+          <div class="pool-img">🐓</div>
+          <div class="pool-img">🌾</div>
+          <div class="pool-img">🎋</div>
+          <div class="pool-img">🌄</div>
+        </div>
+        <div style="padding:8px 10px;font-size:11px;color:var(--text-muted);">还有 7 张未分组</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer-bar">
+    <a href="index.html" class="btn btn-secondary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      返回总览
+    </a>
+    <a href="dashboard.html" class="btn btn-ghost" style="font-size:12px;">查看进阶模块 →</a>
+  </div>
+</main>
+
+</body>
+</html>

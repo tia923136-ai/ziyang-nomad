@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资阳游民 · 总览</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+/* 侧边栏分组标签 */
+.nav-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 12px 4px;
+}
+
+/* 欢迎区 */
+.welcome-banner {
+  background: linear-gradient(135deg, #5a7a5a 0%, #3d5e3d 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.welcome-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.welcome-sub {
+  font-size: 13px;
+  opacity: 0.75;
+}
+.welcome-stats {
+  display: flex;
+  gap: 24px;
+}
+.welcome-stat {
+  text-align: center;
+}
+.welcome-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+.welcome-stat-label {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* 工具卡片网格 */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.tool-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tool-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+  border-color: var(--accent-green);
+}
+.tool-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tool-card-icon svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent-green);
+  stroke: var(--accent-green);
+}
+.tool-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.tool-card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.tool-card-arrow {
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+/* 进阶模块区 */
+.advanced-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.advanced-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-light);
+}
+.advanced-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+}
+.advanced-item {
+  padding: 16px;
+  text-align: center;
+  border-right: 1px solid var(--border-light);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.advanced-item:last-child { border-right: none; }
+.advanced-item:hover { background: var(--bg-sidebar); }
+.advanced-item svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--accent-green);
+  display: block;
+  margin: 0 auto 6px;
+}
+.advanced-item-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.advanced-item-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 近况区 */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-platform {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.recent-info { flex: 1; min-width: 0; }
+.recent-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.recent-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.recent-badge { flex-shrink: 0; }
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-date {
+  text-align: center;
+  flex-shrink: 0;
+  width: 40px;
+}
+.activity-day { font-size: 18px; font-weight: 700; color: var(--accent-green); line-height: 1; }
+.activity-month { font-size: 10px; color: var(--text-muted); }
+.activity-info { flex: 1; }
+.activity-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.activity-type { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- 侧边导航 -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">资阳游民</div>
+    <div class="logo-sub">数字游民社区 · AI 工具箱</div>
+  </div>
+  <div class="sidebar-nav">
+    <!-- 分组：工具箱 -->
+    <div class="nav-group-label">🛠 工具箱</div>
+    <a href="tool-video.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg>
+      <span class="nav-label">视频快剪</span>
+    </a>
+    <a href="tool-image.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+      <span class="nav-label">图片文案</span>
+    </a>
+    <a href="tool-gzh.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="nav-label">公众号发布</span>
+    </a>
+    <a href="tool-publish.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      <span class="nav-label">多平台分发</span>
+    </a>
+    <a href="tool-chat.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="nav-label">聊天分析</span>
+    </a>
+    <a href="tool-matrix.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="nav-label">矩阵数据</span>
+    </a>
+    <!-- 分组：进阶模块 -->
+    <div class="nav-group-label" style="margin-top:6px;">📊 进阶模块</div>
+    <a href="dashboard.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span class="nav-label">老板驾驶舱</span>
+    </a>
+    <a href="crm.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-label">客户旅程</span>
+    </a>
+    <a href="content.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <span class="nav-label">内容 ROI</span>
+    </a>
+    <a href="cunbao.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span class="nav-label">村宝副驾</span>
+    </a>
+    <a href="activity.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="nav-label">活动工厂</span>
+    </a>
+    <!-- 分组：商务方案 -->
+    <div class="nav-group-label" style="margin-top:6px;">💼 商务方案</div>
+    <a href="plan.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      <span class="nav-label">产品方案</span>
+    </a>
+    <a href="pricing.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="nav-label">报价单</span>
+    </a>
+    <a href="team.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11h-6M20 8v6"/></svg>
+      <span class="nav-label">账号权限</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">舒</div>
+      <div class="user-info">
+        <div class="user-name">抒云</div>
+        <div class="user-role">合作方 · 只读</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- 主内容 -->
+<main class="main">
+  <div class="page-header">
+    <div>
+      <div class="page-title">资阳游民总览</div>
+      <div class="page-subtitle">今天是 2026-04-17 · 竹溪谷基地 · 12 位游民在驻</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span class="badge-feishu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+        飞书数据已同步
+      </span>
+      <span style="font-size:12px;color:var(--text-muted)">上次登录 昨日 21:34</span>
+      <a href="dashboard.html" class="btn btn-secondary">查看驾驶舱</a>
+    </div>
+  </div>
+
+  <div class="page-content fade-in">
+
+    <!-- 欢迎横幅 -->
+    <div class="welcome-banner">
+      <div>
+        <div class="welcome-title">晚上好，抒云 🌿</div>
+        <div style="font-size:14px;opacity:0.92;margin:4px 0 8px;font-weight:500;">6 个独立 AI 工具，让 1 个村宝干 3 个村宝的活 · 数据自动入飞书</div>
+        <div class="welcome-sub">今天是 2026年4月17日 · 竹溪谷基地 · 本月长住游民 12 人 · 短住体验 24 人次</div>
+      </div>
+      <div class="welcome-stats">
+        <div class="welcome-stat">
+          <div class="welcome-stat-value">18</div>
+          <div class="welcome-stat-label">今日工具使用</div>
+        </div>
+        <div class="welcome-stat">
+          <div class="welcome-stat-value">7</div>
+          <div class="welcome-stat-label">本周新内容</div>
+        </div>
+        <div class="welcome-stat">
+          <div class="welcome-stat-value">47</div>
+          <div class="welcome-stat-label">飞书入库条数</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI 行 -->
+    <div class="kpi-grid" style="grid-template-columns: repeat(3,1fr); margin-bottom:20px;">
+      <div class="kpi-card">
+        <div class="kpi-label">本月数字游民入驻</div>
+        <div class="kpi-value">12 人</div>
+        <div class="kpi-meta">
+          <span class="badge badge-green">↑ 较上月 +4</span>
+          <span style="font-size:11px;color:var(--text-muted);">平均长住 3.2 周</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">本周新生产内容</div>
+        <div class="kpi-value">7 条</div>
+        <div class="kpi-meta">
+          <span class="badge badge-amber">小红书 4 · 抖音 3</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">工具箱今日调用</div>
+        <div class="kpi-value">18 次</div>
+        <div class="kpi-meta">
+          <span class="badge badge-green">↑ 较昨日 +3</span>
+          <span class="badge-feishu" style="font-size:10px;padding:2px 6px;">→ 飞书</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工具箱入口 -->
+    <div style="margin-bottom:20px;">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        工具箱 · 单件独立功能
+        <span class="badge badge-green" style="font-weight:500;font-size:10px;">6 个工具 · 每件 ¥9,800</span>
+      </div>
+      <div class="tool-grid">
+        <a href="tool-video.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg>
+          </div>
+          <div class="tool-card-name">视频快剪</div>
+          <div class="tool-card-desc">上传原片，AI 粗剪成片，出片时长约等于原片的 1.5 倍</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+        <a href="tool-image.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+          </div>
+          <div class="tool-card-name">图片文案</div>
+          <div class="tool-card-desc">批量图片分组 + 一键生成小红书图文卡片，老板选调性</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+        <a href="tool-gzh.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="tool-card-name">公众号发布</div>
+          <div class="tool-card-desc">编辑文章 + 3 种排版模板 + 一键推送公众号草稿箱</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+        <a href="tool-publish.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </div>
+          <div class="tool-card-name">多平台分发</div>
+          <div class="tool-card-desc">小红书 / 抖音 / 视频号三平台同步发布 · 视频号常失败需手动补发</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+        <a href="tool-chat.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="tool-card-name">聊天分析</div>
+          <div class="tool-card-desc">上传微信聊天记录 · 客户阶段分布 · 高频话术库按使用次数排序</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+        <a href="tool-matrix.html" class="tool-card">
+          <div class="tool-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="tool-card-name">矩阵数据</div>
+          <div class="tool-card-desc">多账号数据聚合看板 + 本周数据摘要 · 按互动数排序</div>
+          <div class="tool-card-arrow">进入工具 →</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 进阶模块 -->
+    <div style="margin-bottom:20px;">
+      <div class="section-label">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        进阶模块 · 深度运营数据
+        <span class="badge badge-amber" style="font-weight:500;font-size:10px;">已开通 · 加购 ¥29,800</span>
+      </div>
+      <div class="advanced-section">
+        <div class="advanced-header">
+          <div class="advanced-title">5 个深度运营模块</div>
+          <span style="font-size:12px;color:var(--text-muted)">实时数据 · 2026-04-17 更新</span>
+        </div>
+        <div class="advanced-grid">
+          <a href="dashboard.html" class="advanced-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <div class="advanced-item-name">老板驾驶舱</div>
+            <div class="advanced-item-sub">驻地占用 68% ↑</div>
+          </a>
+          <a href="crm.html" class="advanced-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="advanced-item-name">客户旅程</div>
+            <div class="advanced-item-sub">47 人在途</div>
+          </a>
+          <a href="content.html" class="advanced-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            <div class="advanced-item-name">内容 ROI</div>
+            <div class="advanced-item-sub">本月互动 4,832</div>
+          </a>
+          <a href="cunbao.html" class="advanced-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <div class="advanced-item-name">村宝副驾</div>
+            <div class="advanced-item-sub">3 待跟进</div>
+          </a>
+          <a href="activity.html" class="advanced-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <div class="advanced-item-name">活动工厂</div>
+            <div class="advanced-item-sub">2场即将开始</div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 本周亮点 -->
+    <div class="highlights-grid">
+      <!-- 最近发布的内容 -->
+      <div class="card">
+        <div class="section-label">最近发布内容</div>
+        <div class="recent-item">
+          <div class="recent-platform" style="background:#fde8e8;">📱</div>
+          <div class="recent-info">
+            <div class="recent-title">🌿 独立开发者在竹林 coding 的一个下午</div>
+            <div class="recent-meta">小红书 · 04-16 · 阅读 3,240 · 点赞 287</div>
+          </div>
+          <div class="recent-badge"><span class="badge badge-green">手动关联 2 人</span></div>
+        </div>
+        <div class="recent-item">
+          <div class="recent-platform" style="background:#fff3e8;">🎵</div>
+          <div class="recent-info">
+            <div class="recent-title">从大厂裸辞到数字游民第 30 天，我做对了什么</div>
+            <div class="recent-meta">抖音 · 04-15 · 播放 18,700 · 点赞 1,320</div>
+          </div>
+          <div class="recent-badge"><span class="badge badge-amber">手动关联 5 人</span></div>
+        </div>
+        <div class="recent-item">
+          <div class="recent-platform" style="background:#e8f3e8;">📖</div>
+          <div class="recent-info">
+            <div class="recent-title">资阳数字游民月报 | 本月 12 位游民都在忙什么</div>
+            <div class="recent-meta">公众号 · 04-14 · 阅读 1,850</div>
+          </div>
+          <div class="recent-badge"><span class="badge badge-blue">手动关联 3 人</span></div>
+        </div>
+        <div style="margin-top:12px;text-align:right;">
+          <a href="content.html" style="font-size:12px;color:var(--accent-green);text-decoration:none;">查看全部内容数据 →</a>
+        </div>
+      </div>
+
+      <!-- 即将到来的活动 -->
+      <div class="card">
+        <div class="section-label">即将开始的活动</div>
+        <div class="activity-item">
+          <div class="activity-date">
+            <div class="activity-day">19</div>
+            <div class="activity-month">4月</div>
+          </div>
+          <div class="activity-info">
+            <div class="activity-name">游民周五晚 Demo 夜</div>
+            <div class="activity-type">驻地分享 · 已报名 12 人</div>
+          </div>
+          <span class="badge badge-green">即将</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-date">
+            <div class="activity-day">21</div>
+            <div class="activity-month">4月</div>
+          </div>
+          <div class="activity-info">
+            <div class="activity-name">远程工作流 Workshop</div>
+            <div class="activity-type">技能分享 · 已报名 8 人</div>
+          </div>
+          <span class="badge badge-amber">招募中</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-date">
+            <div class="activity-day">26</div>
+            <div class="activity-month">4月</div>
+          </div>
+          <div class="activity-info">
+            <div class="activity-name">大厂逃离者深度共创营（3天）</div>
+            <div class="activity-type">沉浸驻地 · 已报名 5/8</div>
+          </div>
+          <span class="badge badge-blue">预热</span>
+        </div>
+        <div style="margin-top:12px;text-align:right;">
+          <a href="activity.html" style="font-size:12px;color:var(--accent-green);text-decoration:none;">活动工厂 →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>

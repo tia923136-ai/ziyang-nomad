@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资阳游民 · 账号权限与分工</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.nav-group-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-muted); padding: 10px 12px 4px;
+}
+
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.section-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.section-block { margin-bottom: 32px; }
+
+/* 4 角色大卡 */
+.roles-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+.role-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 20px 20px;
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+.role-card:hover { box-shadow: var(--shadow); }
+.role-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.role-emoji {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.role-emoji-boss { background: linear-gradient(135deg, #e6dcf5, #c8b3e8); }
+.role-emoji-cunbao { background: linear-gradient(135deg, #eef3ee, #a8c5a0); }
+.role-emoji-content { background: linear-gradient(135deg, #fdf4e7, #f5d5a0); }
+.role-emoji-shuyun { background: linear-gradient(135deg, #edf3f8, #b8d4e8); }
+.role-info { flex: 1; }
+.role-name {
+  font-size: 14px; font-weight: 700; color: var(--text-primary);
+}
+.role-seats {
+  font-size: 11px; color: var(--text-muted); margin-top: 2px;
+}
+.role-identity {
+  font-size: 11px; color: var(--text-secondary);
+  padding: 6px 10px; background: var(--bg-sidebar);
+  border-radius: var(--radius); margin-bottom: 10px; line-height: 1.5;
+}
+.role-cap-list {
+  flex: 1; display: flex; flex-direction: column; gap: 5px;
+}
+.role-cap {
+  font-size: 12px; color: var(--text-primary); line-height: 1.55;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.role-cap-check { color: var(--accent-green); font-weight: 700; flex-shrink: 0; }
+
+/* 分工表 */
+.duty-table {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  margin-bottom: 12px;
+}
+.duty-head {
+  font-size: 12px; font-weight: 700; color: var(--text-primary);
+  padding: 12px 18px; background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+}
+.duty-row-head {
+  display: grid;
+  grid-template-columns: 110px 120px 1fr 150px 1fr;
+  padding: 9px 18px; background: var(--bg);
+  border-bottom: 1px solid var(--border-light);
+  font-size: 11px; color: var(--text-muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.duty-row {
+  display: grid;
+  grid-template-columns: 110px 120px 1fr 150px 1fr;
+  padding: 11px 18px; border-bottom: 1px solid var(--border-light);
+  font-size: 12px; align-items: center;
+}
+.duty-row:last-child { border-bottom: none; }
+.duty-tool { font-weight: 600; color: var(--text-primary); }
+.duty-who {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.duty-who-boss { background: #f0e8f9; color: #7a5a8a; }
+.duty-who-cunbao { background: var(--accent-green-light); color: var(--accent-green); }
+.duty-who-content { background: var(--accent-amber-light); color: var(--accent-amber); }
+.duty-who-auto { background: var(--border-light); color: var(--text-secondary); }
+
+/* 进阶模块分工表（简化 3 列） */
+.duty-row-head.advanced,
+.duty-row.advanced {
+  grid-template-columns: 180px 150px 1fr;
+}
+
+/* 飞书必补高亮 */
+.must-fill-box {
+  background: var(--accent-amber-light); border: 1.5px solid #f0d5a0;
+  border-radius: var(--radius-lg); padding: 18px 22px; margin-top: 14px;
+}
+.must-fill-title {
+  font-size: 14px; font-weight: 700; color: var(--accent-amber);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+}
+.must-fill-table {
+  background: white; border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.must-fill-row {
+  display: grid;
+  grid-template-columns: 2fr 80px 100px 140px 1fr;
+  padding: 8px 0; border-bottom: 1px solid var(--border-light);
+  font-size: 12px; align-items: center;
+}
+.must-fill-row:last-child { border-bottom: none; }
+.must-fill-row.head {
+  font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.04em; font-size: 10px;
+}
+.must-fill-note {
+  font-size: 12px; color: var(--accent-amber); margin-top: 10px; line-height: 1.6;
+}
+
+/* 飞书权限矩阵 */
+.permission-matrix {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.perm-row-head,
+.perm-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr;
+  padding: 12px 18px; align-items: center;
+  border-bottom: 1px solid var(--border-light);
+}
+.perm-row:last-child { border-bottom: none; }
+.perm-row-head {
+  background: var(--bg-sidebar);
+  font-size: 11px; color: var(--text-muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.perm-table-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.perm-cell {
+  text-align: center; font-size: 12px; font-weight: 600;
+  padding: 2px 0;
+}
+.perm-cell-edit {
+  color: var(--accent-green);
+}
+.perm-cell-partial {
+  color: var(--accent-amber);
+}
+.perm-cell-view {
+  color: var(--text-muted);
+}
+
+/* 关键约定 */
+.convention-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+.convention-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 16px 18px;
+}
+.convention-title {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+}
+.convention-desc {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.65;
+}
+
+/* 座位扩展 */
+.scale-table {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.scale-row-head,
+.scale-row {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  padding: 12px 18px; align-items: center;
+  border-bottom: 1px solid var(--border-light);
+}
+.scale-row:last-child { border-bottom: none; }
+.scale-row-head {
+  background: var(--bg-sidebar);
+  font-size: 11px; color: var(--text-muted); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.scale-situation { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.scale-plan { font-size: 12px; color: var(--text-secondary); }
+.scale-price { text-align: right; font-size: 13px; font-weight: 700; }
+.scale-price-free { color: var(--text-muted); font-weight: 500; }
+.scale-price-extra { color: var(--accent-amber); }
+
+/* 配置清单 */
+.checklist-grid {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px 22px;
+}
+.checklist-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; font-size: 13px; color: var(--text-primary);
+  border-bottom: 1px solid var(--border-light);
+}
+.checklist-item:last-child { border-bottom: none; }
+.checklist-checkbox {
+  width: 16px; height: 16px; border: 1.5px solid var(--border);
+  border-radius: 3px; flex-shrink: 0;
+}
+.checklist-tag {
+  font-size: 10px; padding: 2px 6px; border-radius: 3px;
+  margin-left: auto; background: var(--bg-sidebar); color: var(--text-muted);
+}
+
+/* 底部 */
+.page-footer-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px; border-top: 1px solid var(--border-light);
+  background: var(--bg-card); margin-top: auto;
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">资阳游民</div>
+    <div class="logo-sub">数字游民社区 · AI 工具箱</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-group-label">🛠 工具箱</div>
+    <a href="tool-video.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 8 6 4-6 4V8z"/></svg><span class="nav-label">视频快剪</span></a>
+    <a href="tool-image.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg><span class="nav-label">图片文案</span></a>
+    <a href="tool-gzh.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span class="nav-label">公众号发布</span></a>
+    <a href="tool-publish.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span class="nav-label">多平台分发</span></a>
+    <a href="tool-chat.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nav-label">聊天分析</span></a>
+    <a href="tool-matrix.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span class="nav-label">矩阵数据</span></a>
+    <div class="nav-group-label" style="margin-top:6px;">📊 进阶模块</div>
+    <a href="dashboard.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span class="nav-label">老板驾驶舱</span></a>
+    <a href="crm.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="nav-label">客户旅程</span></a>
+    <a href="content.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg><span class="nav-label">内容 ROI</span></a>
+    <a href="cunbao.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span class="nav-label">村宝副驾</span></a>
+    <a href="activity.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="nav-label">活动工厂</span></a>
+    <div class="nav-group-label" style="margin-top:6px;">💼 商务方案</div>
+    <a href="plan.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg><span class="nav-label">产品方案</span></a>
+    <a href="pricing.html" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="nav-label">报价单</span></a>
+    <a href="team.html" class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11h-6M20 8v6"/></svg><span class="nav-label">账号权限</span></a>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">舒</div>
+      <div class="user-info"><div class="user-name">抒云</div><div class="user-role">合作方 · 只读</div></div>
+    </div>
+  </div>
+</nav>
+
+<main class="main" style="display:flex;flex-direction:column;">
+  <div class="page-header">
+    <div>
+      <div class="page-title">账号权限与分工</div>
+      <div class="page-subtitle">谁登录 / 登录看什么 / 哪些数据由谁录入 / 飞书权限怎么映射</div>
+    </div>
+    <span class="badge-feishu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+      权限配置沉淀飞书团队空间
+    </span>
+  </div>
+
+  <div class="page-content fade-in" style="flex:1;">
+
+    <!-- 4 角色大卡 -->
+    <div class="section-block">
+      <div class="section-title">👥 账号角色体系</div>
+      <div class="section-sub">合同含默认 4-5 个座位 · 超出按 ¥3,000 / 5 座加购</div>
+
+      <div class="roles-grid">
+        <div class="role-card">
+          <div class="role-head">
+            <div class="role-emoji role-emoji-boss">👑</div>
+            <div class="role-info">
+              <div class="role-name">老板</div>
+              <div class="role-seats">1 座 · 主理人</div>
+            </div>
+          </div>
+          <div class="role-identity">最高权限 · 唯一"导出周报"和"成交标注"</div>
+          <div class="role-cap-list">
+            <div class="role-cap"><span class="role-cap-check">✓</span>全部 6 工具 + 全部进阶模块</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>决策驾驶舱</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>聊天分析（独占，隐私敏感）</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>飞书多维表全权编辑</div>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-head">
+            <div class="role-emoji role-emoji-cunbao">🏡</div>
+            <div class="role-info">
+              <div class="role-name">村宝</div>
+              <div class="role-seats">1-2 座 · 社群管家</div>
+            </div>
+          </div>
+          <div class="role-identity">日常运营 · 多村宝对话互相隔离</div>
+          <div class="role-cap-list">
+            <div class="role-cap"><span class="role-cap-check">✓</span>工具箱 视频快剪 / 图片文案 / 多平台分发 可用</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>进阶模块 CJM 看板 + 村宝副驾</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>活动工厂操作</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>飞书"人 + 活动"相关表编辑</div>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-head">
+            <div class="role-emoji role-emoji-content">✍️</div>
+            <div class="role-info">
+              <div class="role-name">内容运营</div>
+              <div class="role-seats">1 座 · 可由村宝兼任</div>
+            </div>
+          </div>
+          <div class="role-identity">写文案发内容的人 · 管发布记录</div>
+          <div class="role-cap-list">
+            <div class="role-cap"><span class="role-cap-check">✓</span>全部工具箱 6 工具可用</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>进阶模块"内容 ROI 中心"</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>公众号发布主力</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>飞书"内容发布"相关表编辑</div>
+          </div>
+        </div>
+
+        <div class="role-card">
+          <div class="role-head">
+            <div class="role-emoji role-emoji-shuyun">👀</div>
+            <div class="role-info">
+              <div class="role-name">抒云</div>
+              <div class="role-seats">1 座 · 合作方只读</div>
+            </div>
+          </div>
+          <div class="role-identity">Tia 的转介合伙人 · 全只读 · 帮老板观察数据</div>
+          <div class="role-cap-list">
+            <div class="role-cap"><span class="role-cap-check">✓</span>全部页面 <strong>只读</strong> 查看</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>帮老板做售后观察</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>不进入老板私密数据</div>
+            <div class="role-cap"><span class="role-cap-check">✓</span>不能编辑任何飞书字段</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分工表 · 工具箱层 -->
+    <div class="section-block">
+      <div class="section-title">📝 信息录入责任分工</div>
+      <div class="section-sub">原则：谁产生信息谁录入 · AI 不擅自推断</div>
+
+      <!-- 工具箱层 -->
+      <div class="duty-table">
+        <div class="duty-head">🛠 工具箱层（归野 Web）</div>
+        <div class="duty-row-head">
+          <div>工具</div>
+          <div>谁录入</div>
+          <div>录入什么</div>
+          <div>在哪录入</div>
+          <div>数据流向</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">视频快剪</div>
+          <div><span class="duty-who duty-who-cunbao">村宝</span> <span class="duty-who duty-who-content">内容</span></div>
+          <div>原视频 mp4</div>
+          <div>归野 Web</div>
+          <div>粗剪存本地 + 脚本 → 飞书素材库</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">图片文案</div>
+          <div><span class="duty-who duty-who-cunbao">村宝</span></div>
+          <div>批量图片 + 选调性</div>
+          <div>归野 Web</div>
+          <div>文案 + 图包 → 飞书素材库</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">公众号发布</div>
+          <div><span class="duty-who duty-who-content">内容运营</span></div>
+          <div>文案正文 + 封面图</div>
+          <div>归野 Web</div>
+          <div>草稿箱（微信）+ 记录 → 飞书</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">多平台分发</div>
+          <div><span class="duty-who duty-who-content">内容运营</span></div>
+          <div>视频 + 标题 + tag + 勾平台</div>
+          <div>归野 Web</div>
+          <div>3 平台 + 回执 → 飞书发布总表</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">聊天分析</div>
+          <div><span class="duty-who duty-who-boss">老板唯一</span></div>
+          <div>微信聊天 chats.json</div>
+          <div>老板 Windows PC</div>
+          <div>分析结果 → 飞书 CRM 表</div>
+        </div>
+        <div class="duty-row">
+          <div class="duty-tool">矩阵数据</div>
+          <div><span class="duty-who duty-who-auto">系统自动</span></div>
+          <div>无（每日凌晨 3 点自动抓）</div>
+          <div>—</div>
+          <div>数据 + 周摘要 → 飞书</div>
+        </div>
+      </div>
+
+      <!-- 进阶模块层 -->
+      <div class="duty-table">
+        <div class="duty-head">📊 进阶模块层</div>
+        <div class="duty-row-head advanced">
+          <div>模块</div>
+          <div>谁录入</div>
+          <div>录入什么</div>
+        </div>
+        <div class="duty-row advanced">
+          <div class="duty-tool">CJM 客户看板</div>
+          <div><span class="duty-who duty-who-cunbao">村宝</span> <span class="duty-who duty-who-boss">老板</span></div>
+          <div>拖动客户卡片在 7 阶段间流转</div>
+        </div>
+        <div class="duty-row advanced">
+          <div class="duty-tool">村宝副驾</div>
+          <div><span class="duty-who duty-who-cunbao">村宝</span></div>
+          <div>对话时查询话术库 + 查看客户上下文</div>
+        </div>
+        <div class="duty-row advanced">
+          <div class="duty-tool">活动工厂</div>
+          <div><span class="duty-who duty-who-cunbao">村宝</span></div>
+          <div>活动报名 / 签到 / 照片 / 反馈 / 问题追踪</div>
+        </div>
+        <div class="duty-row advanced">
+          <div class="duty-tool">内容 ROI 中心</div>
+          <div><span class="duty-who duty-who-boss">老板打标</span></div>
+          <div>手动关联"这条内容带来几个入驻"</div>
+        </div>
+        <div class="duty-row advanced">
+          <div class="duty-tool">老板驾驶舱</div>
+          <div><span class="duty-who duty-who-auto">系统汇总</span></div>
+          <div>—</div>
+        </div>
+      </div>
+
+      <!-- 飞书必补 2 项 -->
+      <div class="must-fill-box">
+        <div class="must-fill-title">
+          <span style="font-size:18px;">⚠️</span> 飞书里必须人类手动补的 2 项数据
+        </div>
+        <div style="font-size:12px;color:var(--accent-amber);margin-bottom:10px;line-height:1.6;">
+          这两项是 AI 做不到的，但会显著提升 聊天分析 / 矩阵数据 的价值。建议 <strong>老板每周花 10 分钟</strong> 在飞书多维表里补。
+        </div>
+        <div class="must-fill-table">
+          <div class="must-fill-row head">
+            <div>补什么</div>
+            <div>谁补</div>
+            <div>频率</div>
+            <div>在哪补</div>
+            <div>影响</div>
+          </div>
+          <div class="must-fill-row">
+            <div>成交标注（哪条对话最后成交）</div>
+            <div><span class="duty-who duty-who-boss">老板</span></div>
+            <div>每周一次</div>
+            <div>飞书客户 CRM 表</div>
+            <div>聊天分析 · 话术"成交率"反推</div>
+          </div>
+          <div class="must-fill-row">
+            <div>入驻归因（哪条笔记带来几个入驻）</div>
+            <div><span class="duty-who duty-who-boss">老板</span></div>
+            <div>每周一次</div>
+            <div>飞书矩阵数据总表</div>
+            <div>内容 ROI 中心排序</div>
+          </div>
+        </div>
+        <div class="must-fill-note">
+          💡 <strong>不补也能用</strong>，但降级为"高频话术"（不算成交率）和"按互动数排序"（不算入驻 ROI）。
+        </div>
+      </div>
+    </div>
+
+    <!-- 飞书权限矩阵 -->
+    <div class="section-block">
+      <div class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00a68a" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+        飞书多维表权限映射
+      </div>
+      <div class="section-sub">✏️ 编辑 · ✏️ 部分 · 👀 只读 · 客户可再调整</div>
+
+      <div class="permission-matrix">
+        <div class="perm-row-head">
+          <div>飞书多维表</div>
+          <div class="perm-cell">👑 老板</div>
+          <div class="perm-cell">🏡 村宝</div>
+          <div class="perm-cell">✍️ 内容运营</div>
+          <div class="perm-cell">👀 抒云</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">客户 CRM 表</div>
+          <div class="perm-cell perm-cell-edit">✏️ 编辑+删除</div>
+          <div class="perm-cell perm-cell-partial">✏️ 部分字段</div>
+          <div class="perm-cell perm-cell-view">👀 只读</div>
+          <div class="perm-cell perm-cell-view">👀 只读</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">内容素材库</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-edit">✏️ 编辑</div>
+          <div class="perm-cell perm-cell-edit">✏️ 编辑</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">公众号发布记录表</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">内容发布总表</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">矩阵数据总表</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">活动库</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+        <div class="perm-row">
+          <div class="perm-table-name">话术库</div>
+          <div class="perm-cell perm-cell-edit">✏️</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+          <div class="perm-cell perm-cell-view">👀</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 关键设计约定 -->
+    <div class="section-block">
+      <div class="section-title">🔒 关键设计约定</div>
+      <div class="section-sub">四条权限边界的隐性规则</div>
+
+      <div class="convention-grid">
+        <div class="convention-card">
+          <div class="convention-title">🔐 聊天分析只有老板能用</div>
+          <div class="convention-desc">
+            聊天记录极度敏感，<strong>村宝和内容运营无法看到原始聊天</strong>。他们只能看老板脱敏后分享的"话术库"（已在飞书多维表中隔离）。
+          </div>
+        </div>
+        <div class="convention-card">
+          <div class="convention-title">🤝 内容运营可兼任村宝</div>
+          <div class="convention-desc">
+            如果团队只有老板 + 1 个全能人，可以 1 个账号同时开 2 个角色权限，不占座位。
+          </div>
+        </div>
+        <div class="convention-card">
+          <div class="convention-title">👀 抒云全只读不进私密</div>
+          <div class="convention-desc">
+            给抒云一个只读入口，随时能帮老板看数据、帮 Tia 做"合作方售后"。<strong>不会进入老板的私密数据</strong>（客户 CRM 的成交字段等）。
+          </div>
+        </div>
+        <div class="convention-card">
+          <div class="convention-title">🏡 多村宝对话互不可见</div>
+          <div class="convention-desc">
+            多个村宝共用"村宝副驾"工作台，但<strong>每个人自己的对话互不可见</strong>（隔离）。保护客户隐私不被组内交叉看到。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 座位扩展规则 -->
+    <div class="section-block">
+      <div class="section-title">📈 座位扩展规则</div>
+      <div class="section-sub">5 座内默认含 · 超出 ¥3,000 / 5 座加购</div>
+
+      <div class="scale-table">
+        <div class="scale-row-head">
+          <div>客户情况</div>
+          <div>账号方案</div>
+          <div style="text-align:right;">加价</div>
+        </div>
+        <div class="scale-row">
+          <div class="scale-situation">小团队（老板 + 1 村宝）</div>
+          <div class="scale-plan">老板 1 + 村宝 1 + 内容兼任 + 抒云 = 3 座</div>
+          <div class="scale-price scale-price-free">默认含</div>
+        </div>
+        <div class="scale-row">
+          <div class="scale-situation">标准团队（老板 + 2 村宝 + 1 内容运营）</div>
+          <div class="scale-plan">老板 1 + 村宝 2 + 内容 1 + 抒云 = 4 座</div>
+          <div class="scale-price scale-price-free">默认含</div>
+        </div>
+        <div class="scale-row">
+          <div class="scale-situation">中团队（老板 + 3 村宝 + 1 内容 + 1 客户体验）</div>
+          <div class="scale-plan">6 座（超出 5 座上限）</div>
+          <div class="scale-price scale-price-extra">+¥3,000</div>
+        </div>
+        <div class="scale-row">
+          <div class="scale-situation">多空间运营（5 村宝以上）</div>
+          <div class="scale-plan">10 座（2 次加购包）</div>
+          <div class="scale-price scale-price-extra">+¥6,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 初次登录配置清单 -->
+    <div class="section-block">
+      <div class="section-title">✅ 初次登录配置清单</div>
+      <div class="section-sub">Tia 在交付阶段会帮客户配好 · 客户不用自己折腾</div>
+
+      <div class="checklist-grid">
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>老板账号 + 管理员权限</span>
+          <span class="checklist-tag">账号</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>村宝账号（按人数配）</span>
+          <span class="checklist-tag">账号</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>内容运营账号</span>
+          <span class="checklist-tag">账号</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>抒云只读账号</span>
+          <span class="checklist-tag">账号</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>飞书多维表 7 张核心表创建 + 权限分配</span>
+          <span class="checklist-tag">飞书</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>每个人的飞书账号加入对应多维表协作者</span>
+          <span class="checklist-tag">飞书</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>老板电脑装微信导出助手（Windows · 聊天分析用）</span>
+          <span class="checklist-tag">软件</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>长开机电脑装 多平台分发 · 发布引擎</span>
+          <span class="checklist-tag">软件</span>
+        </div>
+        <div class="checklist-item">
+          <div class="checklist-checkbox"></div>
+          <span>Cookie 助手配好 3 平台登录态</span>
+          <span class="checklist-tag">登录</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer-bar">
+    <a href="pricing.html" class="btn btn-secondary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      上一页：报价单
+    </a>
+    <a href="index.html" class="btn btn-primary">
+      完成 · 回到总览
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+</main>
+
+</body>
+</html>
